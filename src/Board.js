@@ -79,12 +79,34 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
+      // take rowIndex and add the values in row
+      var value = 0;
+      for (var i = 0; i < rowIndex.length; i++) {
+        value += rowIndex[i];
+      }
+      if (value > 1) {
+        return true;
+      }
+      // if value is greater than 1 then return true
+      // if value <= 1 return false
       return false; // fixme
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var conflict = false;
+      // for each row invoke hasRowConflict
+      var board = this.attributes;
+      for (var attribute in board) {
+        if (Array.isArray(board[attribute])) {
+          conflict = this.hasRowConflictAt(board[attribute]);
+          if (conflict === true) {
+            break;
+          }
+        }
+      }
+      // return value of hasRowConflictAt
+      return conflict; // fixme
     },
 
 
@@ -94,12 +116,29 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
+      // take transposed
+      // add values of the transposed
+      // if value > 1 return true
+      var value = 0;
+      for (var i = 0; i < rowIndex.length; i++) {
+        value += rowIndex[i];
+      }
       return false; // fixme
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var conflict = false;
+      var board = this.attributes;
+      var transposed = transpose(board);
+      for (var j = 0; j < transposed.length; j++) {
+        conflict = this.hasRowConflictAt(transposed[j]);
+        if (conflict === true) {
+          break;
+        }
+      }
+      // return value of hasRowConflictAt
+      return conflict; // fixme
     },
 
 
@@ -108,27 +147,91 @@
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
+    // hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+    //   var conflict = false;
+    //   var board = this.attributes;
+
+    //   return conflict; // fixme
+    // },
+
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      // majorDiagonalColumnIndexAtFirstRow will be starting column index atFirst Row
+      // assumes always a perfect square
+      // assumes values can't be added off the board
+
+
+      // [0][majorDiagonalColumnIndexAtFirstRow]
+      // [1][majorDiagonalColumnIndexAtFirstRow + 1]
+      // [2][majorDiagonalColumnIndexAtFirstRow + 2]
+      /// ...
+      // [n-1][majorDiagonalColumnIndexAtFirstRow + (n-1)]
+      var sum = 0;
+      var n = this.attributes.n;
+      var rowsArray = this.rows(); // array of array
+      //console.log(n);
+      for (var i = 0; i < n; i++) {
+        element = rowsArray[i][majorDiagonalColumnIndexAtFirstRow + i];
+        if (element === undefined) {
+          continue;
+        }
+        sum += element;
+      }
+      return (sum > 1);
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      var n = this.attributes.n;
+      var start = (n * -1) + 1;
+      for (var i = start; i < n - 1; i++) {
+        var conflict = this.hasMajorDiagonalConflictAt(i);
+        if (conflict === true) {
+          return conflict;
+        }
+      }
       return false; // fixme
     },
-
-
 
     // Minor Diagonals - go from top-right to bottom-left
     // --------------------------------------------------------------
     //
     // test if a specific minor diagonal on this board contains a conflict
+
+    /*
+    var matrix = [
+      [0, 0, 1, 0],
+      [0, 0, 0, 0],
+      [1, 0, 0, 0],
+      [0, 0, 0, 0]
+    ];
+
+
+    */
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var sum = 0;
+      var n = this.attributes.n;
+      var rowsArray = this.rows(); // array of arrays
+      for (var i = 0; i < rowsArray.length; i++) {
+        //console.log(rowsArray[i][6]);
+        element = rowsArray[i][minorDiagonalColumnIndexAtFirstRow - i];
+        if (element === undefined) {
+          continue;
+        }
+        sum += element;
+      }
+      return (sum > 1);
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      var n = this.attributes.n;
+      var start = n + 1;
+      for (var i = start; i > n - 1; i--) {
+        var conflict = this.hasMinorDiagonalConflictAt(i);
+        if (conflict === true) {
+          return conflict;
+        }
+      }
       return false; // fixme
     }
 
@@ -145,4 +248,21 @@
     });
   };
 
+  // transpose matrix function
+  var transpose = function (matrix) {
+    var copy = [];
+    for (var attribute in matrix) {
+      if (Array.isArray(matrix[attribute])) {
+        for (var i = 0; i < matrix[attribute].length; ++i) {
+          for (var j = 0; j < matrix[i].length; ++j) {
+            if (copy[j] === undefined) {
+              copy[j] = [];
+            }
+            copy[j][i] = matrix[i][j];
+          }
+        }
+        return copy;
+      }
+    }
+  };
 }());
