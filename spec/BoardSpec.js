@@ -214,6 +214,14 @@ describe('Board', function() {
       [0, 0, 0, 1],
       [0, 0, 1, 0]
     ];
+
+    // matrix = [
+    //   [0, 1, 0, 0],
+    //   [0, 0, 0, 0],
+    //   [0, 0, 1, 0],
+    //   [0, 0, 0, 0]
+    // ];
+
     board = new Board(matrix);
 
     it('should not find a row conflict', function() {
@@ -235,6 +243,11 @@ describe('Board', function() {
     it('should find a minorDiagonal conflict', function() {
       expect(board.hasAnyMinorDiagonalConflicts()).to.be.equal(true);
     });
+
+    // check if returns false if no diaganol
+    // it('should return false and not find a minorDiagonal conflict', function() {
+    //   expect(board.hasAnyMinorDiagonalConflicts()).to.be.equal(false);
+    // });
 
     it('should find a queens conflict', function() {
       expect(board.hasAnyQueensConflicts()).to.be.equal(true);

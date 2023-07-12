@@ -16,7 +16,15 @@
 
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution = []; //fixme
+  // returns a matrix of possible rook positions
+  // where each position is placed only if it doesnt create a conflict
+  // n is number of rows and columns
+  if (n === 1) {
+    solution.push([1]);
+  }
+
+
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
