@@ -100,7 +100,7 @@
         var sum = 0;
         for (var j = 0; j < subArray.length; j++) {
           var element = subArray[j];
-          console.log('old sum: ', sum)
+          //console.log('old sum: ', sum);
           sum += element;
         }
 
@@ -130,12 +130,15 @@
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
       var rowsArray = this.rows(); // array of arrays
+      if (rowsArray.length === 0) {
+        return;
+      }
       for (var i = 0; i < rowsArray[0].length; i++) {
         var sum = 0;
         for (var j = 0; j < rowsArray.length; j++) { // 3 times
           sum += rowsArray[j][i];
         }
-        console.log(sum);
+        //console.log(sum);
         if (sum > 1) {
           return true;
         }
@@ -215,7 +218,7 @@
         }
         sum += element;
       }
-      console.log(sum);
+      //console.log(sum);
       return (sum > 1);
     },
     //
@@ -230,9 +233,9 @@
       // n = 4;
       // n - 1 = 3;
       // i > 0;
-      console.log('matrix: ', this.attributes);
+      //console.log('matrix: ', this.attributes);
       for (var i = start; i > 0; i--) {
-        console.log('start: ', start, 'column index: ', i);
+        //console.log('start: ', start, 'column index: ', i);
         var conflict = this.hasMinorDiagonalConflictAt(i);
         if (conflict === true) {
           return conflict;
